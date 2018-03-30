@@ -10,12 +10,28 @@ PID::PID() {}
 
 PID::~PID() {}
 
-void PID::Init(double Kp, double Ki, double Kd) {
+void PID::Init(double Kp, double Ki, double Kd)
+{
+  this->Kp = Kp;
+  this->Ki = Ki;
+  this->Kd = Kd;
+
+  p_error = 0;
+  i_error = 0;
+  d_error = 0;
 }
 
-void PID::UpdateError(double cte) {
+void PID::UpdateError(double cte)
+{
+  // Current error - previous error
+  d_error = cte - p_error;
+  // Current error
+  p_error = cte;
+  // Integrate the error
+  i_error += cte;
 }
 
-double PID::TotalError() {
+double PID::TotalError()
+{
+  return -Kp * p_error - Kd * d_error - Ki * i_error;
 }
-
